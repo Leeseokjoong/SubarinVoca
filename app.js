@@ -66,8 +66,21 @@
   const btnBackHome = $('#btnBackHome');
 
   // -------- 초기화 --------
-  show(step1);
-  loadPresetList();
+  // 초기화: DOM이 완전히 준비된 뒤 안전하게 실행
+(function init() {
+  try {
+    // 1단계 먼저 보여주고
+    show(document.getElementById('step1'));
+    // 메뉴판(data/index.json) 불러오기 시도
+    loadPresetList();
+    console.log('app.js init OK');
+  } catch (e) {
+    console.error('초기화 중 오류:', e);
+    // 문제가 있으면 1단계는 보이도록 유지
+    document.getElementById('step1').style.display = 'block';
+  }
+})();
+
 
   // 1단계 → 2단계
   btnGoStep2.addEventListener('click', () => {
@@ -334,3 +347,4 @@
 
   btnBackHome.addEventListener('click', () => location.reload());
 })();
+
