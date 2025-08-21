@@ -42,18 +42,7 @@
           <div class="hint">※ data/index.json만 수정하면 목록이 자동 갱신됩니다.</div>
         </div>
 
-        <!-- (B) 직접 파일로 불러오기 -->
-        <div class="field">
-          <span>단어 파일(JSON 직접 선택)</span>
-          <input id="fileInput" type="file" accept="application/json" />
-          <div class="hint">형식: [{"word":"abandon","meaning":"버리다"}, ...] (UTF-8)</div>
-        </div>
-        <div class="row">
-          <button id="btnLoad" class="btn primary">리스트 불러오기</button>
-          <button id="btnUseSample" class="btn ghost">샘플 사용</button>
-        </div>
-
-        <div id="loadInfo" class="muted"></div>
+            <div id="loadInfo" class="muted"></div>
 
         <!-- 🔽 단어 불러온 뒤 표시되는 '30개 묶음' 컨트롤 -->
         <hr/>
@@ -186,3 +175,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
