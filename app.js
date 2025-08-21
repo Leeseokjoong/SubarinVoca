@@ -3,7 +3,7 @@
   const $ = (sel) => document.querySelector(sel);
   const show = (el) => {
     for (const s of document.querySelectorAll('.screen')) s.style.display = 'none';
-    el.style.display = '';
+    el.style.display = 'block';
   };
 
   // -------- 상태 --------
@@ -347,4 +347,5 @@
 
   btnBackHome.addEventListener('click', () => location.reload());
 })();
+
 
