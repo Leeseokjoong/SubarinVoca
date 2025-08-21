@@ -2,128 +2,88 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>수브레인 영단어 학습 프로그램</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>수브레인 영단어 학습</title>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header class="app-header">
-    <h1>수브레인영단어 학습 프로그램</h1>
-    <p class="subtitle">30개씩 묶어 학습 → 4지선다 퀴즈 → 결과/재학습 → 완료</p>
-  </header>
-
   <main class="container">
-    <!-- 1단계: 이름 입력 -->
-    <section id="step1" class="screen active">
+
+    <h1>영단어 학습 프로그램</h1>
+    <p class="muted">단계별로 학습하고 퀴즈로 마무리하세요</p>
+
+    <!-- 1단계: 학생 이름 -->
+    <section id="step1" class="screen">
       <div class="card">
         <h2>1단계: 학생 이름</h2>
         <div class="field">
-          <span>학생 이름</span>
-          <input id="studentName" type="text" placeholder="예: 김서준" />
+          <label for="studentName">학생 이름</label>
+          <input id="studentName" type="text" placeholder="예) 김서준" />
         </div>
         <div class="row">
-          <button id="btnToStep2" class="btn primary">다음</button>
+          <button id="btnGoStep2" class="btn primary">다음</button>
         </div>
       </div>
     </section>
 
-    <!-- 2단계: 단어 선택 + 묶음(배치) 선택 -->
+    <!-- 2단계: 단어 세트 선택 (메뉴판/자동목록) -->
     <section id="step2" class="screen">
       <div class="card">
         <h2>2단계: 단어 리스트 선택</h2>
 
-        <!-- (A) data/index.json에서 자동으로 목록을 불러오는 영역 -->
-        <div class="card" style="margin-bottom:16px;">
-          <h3 style="margin:0 0 10px;">미리 준비된 세트(자동 목록)</h3>
-          <div class="row">
-            <select id="presetSelect" style="min-width:280px;"></select>
-            <button id="btnUsePreset" class="btn">선택한 세트 사용</button>
-          </div>
-          <div class="hint">※ data/index.json만 수정하면 목록이 자동 갱신됩니다.</div>
-        </div>
-
-            <div id="loadInfo" class="muted"></div>
-
-        <!-- 🔽 단어 불러온 뒤 표시되는 '30개 묶음' 컨트롤 -->
-        <hr/>
-        <div id="batchWrap" class="card" style="display:none;">
-          <h3 style="margin-top:0;">학습 묶음 선택 (30개 단위)</h3>
-          <div class="row">
-            <button id="btnBatchPrev" class="btn ghost">◀ 이전 묶음</button>
-            <select id="batchSelect"></select>
-            <button id="btnBatchNext" class="btn ghost">다음 묶음 ▶</button>
-          </div>
-          <div class="hint" id="batchInfo">총 0개 단어 · 0묶음 · 현재 0번째 묶음</div>
-        </div>
-
-        <hr/>
-        <div class="grid2">
-          <label class="field">
-            <span>학습 자동 넘김(초)</span>
-            <input id="autoplaySec" type="number" min="0" value="0" />
-            <div class="hint">0이면 자동 넘김 없음</div>
-          </label>
-          <label class="field">
-            <span>TTS 언어</span>
-            <select id="ttsLang">
-              <option value="en-US" selected>영어(en-US)</option>
-            </select>
-          </label>
-        </div>
+        <h3>미리 준비된 세트(자동 목록)</h3>
         <div class="row">
-          <button id="btnStartStudy" class="btn success">3단계: 단어 학습 시작</button>
+          <select id="presetSelect" style="min-width:280px">
+            <option value="" selected>목록 불러오는 중...</option>
+          </select>
+          <button id="btnUsePreset" class="btn primary">선택한 세트 사용</button>
         </div>
+        <p class="muted">※ <code>data/index.json</code>만 수정하면 목록이 자동 갱신됩니다.</p>
+
+        <div id="loadInfo" class="muted"></div>
+      </div>
+
+      <div class="row">
+        <button id="btnToStep1" class="btn ghost">이전</button>
+        <button id="btnStartStudy" class="btn primary" disabled>학습 시작</button>
       </div>
     </section>
 
     <!-- 3단계: 단어 학습 -->
     <section id="step3" class="screen">
-      <div class="topbar">
-        <div class="crumbs">3단계: 단어 학습 (30개 묶음)</div>
-        <div class="status">
-          <span id="studyIndex">1</span>/<span id="studyTotal">0</span>
-          <span class="muted"> · <span id="batchLabel">1</span>번째 묶음</span>
-        </div>
-      </div>
-      <div class="card big">
-        <div class="word" id="studyWord">word</div>
-        <div class="meaning" id="studyMeaning">meaning</div>
-
-        <div class="speak-wrap">
-          <button id="btnSpeak" class="icon-btn" aria-label="다시 듣기">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M3 10v4h3l4 3V7L6 10H3z" fill="currentColor"></path>
-              <path d="M14 9a3 3 0 010 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M16.5 7a6 6 0 010 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-            </svg>
-          </button>
-          <div class="sublabel">다시 듣기</div>
-        </div>
-
-        <div class="actions row">
-          <button id="btnPrev" class="btn ghost">◀ 이전</button>
-          <button id="btnNext" class="btn primary">다음 ▶</button>
+      <div class="card">
+        <h2>3단계: 단어 학습</h2>
+        <div class="study-box">
+          <div id="studyWord" class="word" aria-live="polite">단어</div>
+          <div id="studyMeaning" class="meaning">뜻</div>
+          <button id="btnSpeak" class="btn circle" title="다시 듣기">🔊</button>
+          <div class="muted" style="margin-top:8px">
+            <span id="studyIndex">0</span>/<span id="studyTotal">0</span>
+          </div>
         </div>
       </div>
 
       <div class="row">
-        <button id="btnGoQuiz" class="btn warning">4단계: 이 묶음 퀴즈 시작</button>
+        <button id="btnPrev" class="btn ghost">◀ 이전</button>
+        <button id="btnNext" class="btn">다음 ▶</button>
+        <button id="btnGoQuiz" class="btn primary">퀴즈 시작</button>
       </div>
     </section>
 
     <!-- 4단계: 퀴즈 -->
     <section id="step4" class="screen">
-      <div class="topbar">
-        <div class="crumbs">4단계: 퀴즈 (현재 묶음)</div>
-        <div class="status">
-          <span id="quizIndex">1</span>/<span id="quizTotal">0</span>
-          <span class="muted"> · <span id="batchLabelQuiz">1</span>번째 묶음</span>
+      <div class="card">
+        <div class="topline">
+          <button id="btnQuitQuiz" class="btn ghost">중단</button>
+          <div class="muted"><span id="quizIndex">0</span>/<span id="quizTotal">0</span></div>
         </div>
+
+        <div id="quizWord" class="word">word</div>
+        <div id="choiceList" class="grid"></div>
       </div>
 
-      <div class="card big">
-        <div class="quiz-word" id="quizWord">abandon</div>
-        <div class="choices" id="quizChoices"></div>
+      <div class="row">
+        <button id="btnNextQuiz" class="btn" disabled>다음 문제</button>
       </div>
     </section>
 
@@ -131,48 +91,27 @@
     <section id="step5" class="screen">
       <div class="card">
         <h2>5단계: 결과 & 재학습</h2>
+
         <div class="stat-line">
           <div>정답: <b id="statCorrect">0</b></div>
           <div>오답: <b id="statWrong">0</b></div>
           <div>정답률: <b id="statRate">0%</b></div>
           <div class="muted">현재 묶음: <b id="batchLabelResult">1</b>번째</div>
         </div>
+
         <div id="wrongListWrap" class="wrong-list"></div>
 
         <div class="row">
           <button id="btnRetryWrong" class="btn warning" disabled>오답만 다시 풀기</button>
-          <button id="btnRedoStudy" class="btn">이 묶음 다시 학습</button>
-          <button id="btnNextBatch" class="btn ghost">다음 묶음으로 이동</button>
-          <button id="btnExportCsv" class="btn">CSV로 저장</button>
-          <button id="btnToStep6" class="btn success">6단계: 학습 완료</button>
+          <button id="btnExportCsv" class="btn">CSV로 내보내기</button>
+          <button id="btnBackHome" class="btn ghost">처음으로</button>
         </div>
       </div>
     </section>
 
-    <!-- 6단계: 학습완료 인증 -->
-    <section id="step6" class="screen">
-      <div class="card">
-        <h2>🎉 학습완료 인증</h2>
-        <p><b id="certStudent">학생</b> 님이 <b id="certList">리스트</b> 학습을 완료했습니다.</p>
-        <p>정답 <b id="certCorrect">0</b> / 오답 <b id="certWrong">0</b> (정답률 <b id="certRate">0%</b>)</p>
-        <p>완료일: <span id="certDate"></span></p>
-        <div class="row">
-          <button id="btnCertHome" class="btn">처음으로</button>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="app-footer">© 2025 수브레인 — v1</footer>
-
-  <!-- 효과음 -->
-  <audio id="correctSound" preload="auto"
-         src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-  <audio id="wrongSound" preload="auto"
-         src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-
-  <script src="sounds.js"></script>
-  <script src="app.js"></script>
+  <script src="./sounds.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
-
