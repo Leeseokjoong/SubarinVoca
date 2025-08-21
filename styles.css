@@ -137,3 +137,6 @@ button:disabled{ opacity:.5; cursor:not-allowed; }
 
 /* ===== 푸터 ===== */
 .app-footer{ text-align:center; font-size:12px; opacity:.8; padding:18px 0; }
+.screen { display: none; }
+#step1 { display: block; }
+
