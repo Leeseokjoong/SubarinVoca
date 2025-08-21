@@ -1,406 +1,228 @@
-// app.js — 자동 배치(30개) 모드 + 다음 묶음 자동 진행
+// app.js
+// ===============================
+// 기본 상태 변수
+let studentName = "";
+let wordSets = [];
+let currentWords = [];
+let studyIndex = 0;
+let quizIndex = 0;
+let wrongList = [];
+let correctCount = 0;
+let wrongCount = 0;
+let batchSize = 30; // ✅ 한 번에 학습할 단어 수
 
-(() => {
-  // -------- 공통 유틸 --------
-  const $ = (sel) => document.querySelector(sel);
-  const show = (el) => {
-    document.querySelectorAll('.screen').forEach(s => (s.style.display = 'none'));
-    el.style.display = 'block';
-  };
+// 화면 전환 함수
+function showStep(step) {
+  document.querySelectorAll(".screen").forEach(sec => sec.style.display = "none");
+  document.querySelector("#" + step).style.display = "block";
+}
 
-  // -------- 상태 --------
-  const state = {
-    student: null,
-    listName: 'local',
-
-    // 전체 / 현재 배치
-    wordsAll: [],     // 전체 단어 원본
-    words: [],        // 현재 배치 단어 (slice)
-
-    studyIndex: 0,
-
-    // 배치(묶음)
-    batchSize: 30,    // ✅ 한 번에 학습할 개수
-    batchIndex: 0,    // 0부터 시작
-    get batchCount() {
-      return Math.max(1, Math.ceil(this.wordsAll.length / this.batchSize));
-    },
-
-    // 자동 발음
-    ttsRepeat: 2,     // 단어 변경 시 자동 2번 읽기
-
-    // 퀴즈
-    quizOrder: [],
-    quizIndex: 0,
-    wrongs: [],
-
-    // 진행 저장 키(학생/리스트/배치 포함)
-    storageKey() {
-      return `subrain_vocab_${this.student || 'anon'}_${this.listName}_b${this.batchIndex}`;
-    }
-  };
-
-  // -------- 요소 참조 --------
-  const step1 = $('#step1');
-  const step2 = $('#step2');
-  const step3 = $('#step3');
-  const step4 = $('#step4');
-  const step5 = $('#step5');
-
-  const studentName = $('#studentName');
-  const btnGoStep2 = $('#btnGoStep2');
-
-  const presetSelect = $('#presetSelect');
-  const btnUsePreset = $('#btnUsePreset');
-  const btnStartStudy = $('#btnStartStudy');
-  const btnToStep1 = $('#btnToStep1');
-  const loadInfo = $('#loadInfo');
-
-  const studyWord = $('#studyWord');
-  const studyMeaning = $('#studyMeaning');
-  const studyIndex = $('#studyIndex');
-  const studyTotal = $('#studyTotal');
-  const btnSpeak = $('#btnSpeak');
-  const btnPrev = $('#btnPrev');
-  const btnNext = $('#btnNext');
-  const btnGoQuiz = $('#btnGoQuiz');
-
-  const btnQuitQuiz = $('#btnQuitQuiz');
-  const quizWord = $('#quizWord');
-  const quizIndex = $('#quizIndex');
-  const quizTotal = $('#quizTotal');
-  const choiceList = $('#choiceList');
-  const btnNextQuiz = $('#btnNextQuiz');
-
-  const statCorrect = $('#statCorrect');
-  const statWrong = $('#statWrong');
-  const statRate = $('#statRate');
-  const batchLabelResult = $('#batchLabelResult');
-  const wrongListWrap = $('#wrongListWrap');
-  const btnRetryWrong = $('#btnRetryWrong');
-  const btnExportCsv = $('#btnExportCsv');
-  const btnBackHome = $('#btnBackHome');
-
-  // -------- 초기화 --------
-  show(step1);
-  loadPresetList();
-
-  // 1단계 → 2단계
-  btnGoStep2.addEventListener('click', () => {
-    if (!studentName.value.trim()) {
-      alert('학생 이름을 입력하세요.');
-      studentName.focus();
-      return;
-    }
-    state.student = studentName.value.trim();
-    show(step2);
-  });
-
-  // 2단계: 메뉴판 목록 불러오기
-  async function loadPresetList() {
-    try {
-      const res = await fetch('./data/index.json', { cache: 'no-store' });
-      if (!res.ok) throw new Error('index.json을 불러오지 못했습니다.');
-      const data = await res.json();
-
-      presetSelect.innerHTML = '';
-      (data.lists || []).forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.file;
-        opt.textContent = item.label;
-        presetSelect.appendChild(opt);
-      });
-
-      if (!presetSelect.options.length) {
-        const opt = document.createElement('option');
-        opt.value = '';
-        opt.textContent = '목록이 없습니다';
-        presetSelect.appendChild(opt);
-      }
-    } catch (e) {
-      console.error(e);
-      presetSelect.innerHTML = `<option value="">목록을 불러오지 못했습니다</option>`;
-    }
+// -------------------------------
+// Step1 → Step2 (이름 입력 후)
+document.querySelector("#btnGoStep2").addEventListener("click", () => {
+  const nameInput = document.querySelector("#studentName").value.trim();
+  if (!nameInput) {
+    alert("이름을 입력하세요.");
+    return;
   }
+  studentName = nameInput;
+  showStep("step2");
+});
 
-  // (메뉴판) 선택한 세트 사용
-  btnUsePreset.addEventListener('click', async () => {
-    const file = presetSelect.value;
-    if (!file) return alert('세트를 선택하세요.');
-    try {
-      const res = await fetch(`./data/${file}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`세트를 불러오지 못했습니다: HTTP ${res.status}`);
-      const words = await res.json();
-      useWords(words, file.replace(/\.json$/i, ''));
-    } catch (e) {
-      alert(e.message || '세트를 불러오지 못했습니다.');
-    }
-  });
-
-  // 전체 단어 저장 → 배치 잘라 넣기
-  function useWords(words, listName = 'list') {
-    state.wordsAll = (words || []).filter(w => w.word && w.meaning);
-    state.listName = listName;
-
-    state.batchIndex = 0; // 처음 배치부터
-    applyBatchSlice();
-
-    loadInfo.textContent = `총 단어: ${state.wordsAll.length}개 / 현재 묶음: ${state.batchIndex + 1}/${state.batchCount}`;
-    btnStartStudy.disabled = state.words.length === 0;
-  }
-
-  // 현재 배치 단어로 slice 적용
-  function applyBatchSlice() {
-    const start = state.batchIndex * state.batchSize;
-    const end = start + state.batchSize;
-    state.words = state.wordsAll.slice(start, end);
-
-    // UI 지표 업데이트
-    studyTotal.textContent = state.words.length;
-    batchLabelResult.textContent = `${state.batchIndex + 1}/${state.batchCount}`;
-  }
-
-  // 2단계 버튼
-  btnToStep1.addEventListener('click', () => show(step1));
-  btnStartStudy.addEventListener('click', () => {
-    if (!state.words.length) return;
-    state.studyIndex = 0;
-    renderStudy(true);
-    show(step3);
-  });
-
-  // -------- 학습 화면 --------
-  function tts(text) {
-    if (!text) return;
-    try {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
-      u.rate = 0.9; // 조금 느리게
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
-    } catch {}
-  }
-
-  function renderStudy(autoSpeak = false) {
-    const w = state.words[state.studyIndex];
-    if (!w) return;
-
-    studyWord.textContent = w.word;
-    studyMeaning.textContent = w.meaning;
-    studyIndex.textContent = state.studyIndex + 1;
-    studyTotal.textContent = state.words.length;
-
-    if (autoSpeak) {
-      let count = 0;
-      const speakTwice = () => {
-        if (count >= state.ttsRepeat) return;
-        tts(w.word);
-        count++;
-        setTimeout(speakTwice, 800);
-      };
-      speakTwice();
-    }
-  }
-
-  btnPrev.addEventListener('click', () => {
-    if (state.studyIndex > 0) {
-      state.studyIndex--;
-      renderStudy(true);
-    }
-  });
-
-  btnNext.addEventListener('click', () => {
-    if (state.studyIndex < state.words.length - 1) {
-      state.studyIndex++;
-      renderStudy(true);
-    }
-  });
-
-  btnSpeak.addEventListener('click', () =>
-    tts(state.words[state.studyIndex]?.word)
-  );
-
-  btnGoQuiz.addEventListener('click', () =>
-    startQuiz(state.words.map((_, i) => i))
-  );
-
-  // -------- 퀴즈 --------
-  function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function startQuiz(indices) {
-    if (!indices.length) return;
-    state.quizOrder = shuffle(indices.slice());
-    state.quizIndex = 0;
-    state.wrongs = [];
-    quizTotal.textContent = state.quizOrder.length;
-    renderQuiz();
-    show(step4);
-  }
-
-  function renderQuiz() {
-    btnNextQuiz.disabled = true;
-
-    const idx = state.quizOrder[state.quizIndex];
-    const w = state.words[idx];
-    quizWord.textContent = w.word;
-    quizIndex.textContent = state.quizIndex + 1;
-
-    // 보기: 정답 1 + 오답 3 (중복 제거)
-    const pool = state.words.map(x => x.meaning);
-    const correct = w.meaning;
-    const used = new Set([correct]);
-    const choices = [correct];
-
-    shuffle(pool);
-    for (const m of pool) {
-      if (choices.length >= 4) break;
-      if (!used.has(m)) {
-        used.add(m);
-        choices.push(m);
-      }
-    }
-    shuffle(choices);
-
-    choiceList.innerHTML = '';
-    choices.forEach(m => {
-      const btn = document.createElement('button');
-      btn.className = 'choice';
-      btn.textContent = m;
-      btn.addEventListener('click', () => onAnswer(w, m, btn));
-      choiceList.appendChild(btn);
+// -------------------------------
+// index.json 불러오기
+async function loadIndex() {
+  try {
+    const res = await fetch("./data/index.json");
+    wordSets = await res.json();
+    const select = document.querySelector("#presetSelect");
+    select.innerHTML = `<option value="">세트를 선택하세요</option>`;
+    wordSets.forEach((set, i) => {
+      const opt = document.createElement("option");
+      opt.value = set.file;
+      opt.textContent = set.name;
+      select.appendChild(opt);
     });
+  } catch (err) {
+    console.error("index.json 불러오기 실패", err);
+    document.querySelector("#loadInfo").textContent = "목록을 불러올 수 없습니다.";
   }
+}
+loadIndex();
 
-  function onAnswer(w, chosen, el) {
-    const isCorrect = chosen === w.meaning;
-    [...choiceList.children].forEach(c => (c.disabled = true));
-
-    if (isCorrect) {
-      el.classList.add('correct');
-      window.Sounds?.success();
-      setTimeout(nextQuiz, 400); // 정답시 자동 진행
-    } else {
-      el.classList.add('wrong');
-      window.Sounds?.fail();
-      state.wrongs.push({
-        word: w.word,
-        correctMeaning: w.meaning,
-        chosenMeaning: chosen
-      });
-      btnNextQuiz.disabled = false;
-    }
-
-    persistProgress(isCorrect);
+// -------------------------------
+// 세트 선택 버튼
+let selectedFile = "";
+document.querySelector("#btnUsePreset").addEventListener("click", () => {
+  const val = document.querySelector("#presetSelect").value;
+  if (!val) {
+    alert("세트를 선택하세요.");
+    return;
   }
+  selectedFile = val;
+  document.querySelector("#btnStartStudy").disabled = false;
+});
 
-  function nextQuiz() {
-    if (state.quizIndex < state.quizOrder.length - 1) {
-      state.quizIndex++;
-      renderQuiz();
-    } else {
-      showResult();
-    }
+// -------------------------------
+// Step2 → Step3 (학습 시작)
+document.querySelector("#btnStartStudy").addEventListener("click", async () => {
+  if (!selectedFile) return;
+  try {
+    const res = await fetch("./data/" + selectedFile);
+    const allWords = await res.json();
+
+    // ✅ 30개씩 자르기 (첫 묶음만)
+    currentWords = allWords.slice(0, batchSize);
+
+    studyIndex = 0;
+    updateStudyUI();
+    showStep("step3");
+  } catch (err) {
+    console.error("단어 파일 불러오기 실패", err);
   }
+});
 
-  btnNextQuiz.addEventListener('click', nextQuiz);
-  btnQuitQuiz.addEventListener('click', showResult);
+// -------------------------------
+// Step3: 학습 UI
+function updateStudyUI() {
+  const w = currentWords[studyIndex];
+  document.querySelector("#studyWord").textContent = w.word;
+  document.querySelector("#studyMeaning").textContent = w.meaning;
+  document.querySelector("#studyIndex").textContent = studyIndex + 1;
+  document.querySelector("#studyTotal").textContent = currentWords.length;
+}
 
-  function persistProgress(isCorrect) {
-    const key = state.storageKey();
-    const now = new Date().toISOString();
-    const data = JSON.parse(localStorage.getItem(key) || '{}');
-    const entryKey = `${state.quizOrder[state.quizIndex]}:${now}`;
-    data[entryKey] = { isCorrect, word: quizWord.textContent, time: now };
-    localStorage.setItem(key, JSON.stringify(data));
+// 버튼 이벤트
+document.querySelector("#btnPrev").addEventListener("click", () => {
+  if (studyIndex > 0) {
+    studyIndex--;
+    updateStudyUI();
   }
+});
 
-  // -------- 결과 --------
-  function showResult() {
-    const total = state.quizOrder.length;
-    const wrongs = state.wrongs;
-    const correct = total - wrongs.length;
-
-    statCorrect.textContent = correct;
-    statWrong.textContent = wrongs.length;
-    statRate.textContent = Math.round((correct / Math.max(1, total)) * 100) + '%';
-    batchLabelResult.textContent = `${state.batchIndex + 1}/${state.batchCount}`;
-
-    wrongListWrap.innerHTML = '';
-    if (wrongs.length) {
-      wrongs.forEach(w => {
-        const div = document.createElement('div');
-        div.className = 'wrong-item';
-        div.textContent = `${w.word} → 정답: ${w.correctMeaning} (선택: ${w.chosenMeaning})`;
-        wrongListWrap.appendChild(div);
-      });
-      btnRetryWrong.disabled = false;
-    } else {
-      const div = document.createElement('div');
-      div.className = 'muted';
-      div.textContent = '오답이 없습니다. 완벽!';
-      wrongListWrap.appendChild(div);
-      btnRetryWrong.disabled = true;
-    }
-
-    // ✅ 자동 모드: 다음 묶음이 있으면 잠깐 보여준 뒤 자동 진행
-    if (state.batchIndex < state.batchCount - 1) {
-      show(step5); // 결과 잠깐 표시
-      setTimeout(() => {
-        state.batchIndex++;
-        applyBatchSlice();
-        state.studyIndex = 0;
-        renderStudy(true);
-        show(step3);
-      }, 1200); // 1.2초 후 다음 묶음 자동 학습 시작
-    } else {
-      // 마지막 묶음이면 결과 화면에 머무름
-      show(step5);
-    }
+document.querySelector("#btnNext").addEventListener("click", () => {
+  if (studyIndex < currentWords.length - 1) {
+    studyIndex++;
+    updateStudyUI();
   }
+});
 
-  // 오답만 다시 풀기(해당 배치 내에서만)
-  btnRetryWrong.addEventListener('click', () => {
-    const map = new Map(state.words.map((w, i) => [w.word, i]));
-    const indices = [];
-    state.wrongs.forEach(w => {
-      const i = map.get(w.word);
-      if (i != null) indices.push(i);
+// 음성 출력
+document.querySelector("#btnSpeak").addEventListener("click", () => {
+  const word = document.querySelector("#studyWord").textContent;
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.lang = "en-US";
+  speechSynthesis.speak(utter);
+});
+
+// 학습 → 퀴즈 시작
+document.querySelector("#btnGoQuiz").addEventListener("click", () => {
+  startQuiz();
+  showStep("step4");
+});
+
+// -------------------------------
+// Step4: 퀴즈
+function startQuiz() {
+  quizIndex = 0;
+  wrongList = [];
+  correctCount = 0;
+  wrongCount = 0;
+  updateQuizUI();
+}
+
+function updateQuizUI() {
+  const w = currentWords[quizIndex];
+  document.querySelector("#quizWord").textContent = w.word;
+
+  // 보기 4개 생성
+  const choices = [w.meaning];
+  while (choices.length < 4) {
+    const r = currentWords[Math.floor(Math.random() * currentWords.length)].meaning;
+    if (!choices.includes(r)) choices.push(r);
+  }
+  choices.sort(() => Math.random() - 0.5);
+
+  const choiceList = document.querySelector("#choiceList");
+  choiceList.innerHTML = "";
+  choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.className = "btn choice";
+    btn.addEventListener("click", () => {
+      handleAnswer(choice === w.meaning);
     });
-    if (indices.length) startQuiz(indices);
+    choiceList.appendChild(btn);
   });
 
-  // CSV 내보내기 (선생님용)
-  btnExportCsv.addEventListener('click', () => {
-    const key = state.storageKey();
-    const data = JSON.parse(localStorage.getItem(key) || '{}');
-    const rows = [['student', 'list', 'batch', 'word', 'isCorrect', 'time']];
-    Object.values(data).forEach(v => {
-      rows.push([
-        state.student,
-        state.listName,
-        state.batchIndex + 1,
-        v.word,
-        v.isCorrect ? '1' : '0',
-        v.time
-      ]);
-    });
-    const csv = rows
-      .map(r => r.map(x => `"${String(x).replaceAll('"', '""')}"`).join(','))
-      .join('\n');
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `subrain_${state.student}_${state.listName}_b${state.batchIndex + 1}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  document.querySelector("#quizIndex").textContent = quizIndex + 1;
+  document.querySelector("#quizTotal").textContent = currentWords.length;
+  document.querySelector("#btnNextQuiz").disabled = true;
+}
+
+function handleAnswer(correct) {
+  if (correct) {
+    correctCount++;
+  } else {
+    wrongCount++;
+    wrongList.push(currentWords[quizIndex]);
+  }
+  document.querySelectorAll(".choice").forEach(btn => btn.disabled = true);
+  document.querySelector("#btnNextQuiz").disabled = false;
+}
+
+document.querySelector("#btnNextQuiz").addEventListener("click", () => {
+  if (quizIndex < currentWords.length - 1) {
+    quizIndex++;
+    updateQuizUI();
+  } else {
+    showResult();
+  }
+});
+
+// -------------------------------
+// Step5: 결과
+function showResult() {
+  showStep("step5");
+  document.querySelector("#statCorrect").textContent = correctCount;
+  document.querySelector("#statWrong").textContent = wrongCount;
+  const rate = Math.round((correctCount / currentWords.length) * 100);
+  document.querySelector("#statRate").textContent = rate + "%";
+
+  const wrongListWrap = document.querySelector("#wrongListWrap");
+  wrongListWrap.innerHTML = "";
+  wrongList.forEach(w => {
+    const div = document.createElement("div");
+    div.textContent = `${w.word} - ${w.meaning}`;
+    wrongListWrap.appendChild(div);
   });
 
-  btnBackHome.addEventListener('click', () => location.reload());
-})();
+  document.querySelector("#btnRetryWrong").disabled = wrongList.length === 0;
+}
+
+// 오답만 다시 풀기
+document.querySelector("#btnRetryWrong").addEventListener("click", () => {
+  if (wrongList.length === 0) return;
+  currentWords = wrongList;
+  startQuiz();
+  showStep("step4");
+});
+
+// CSV 내보내기
+document.querySelector("#btnExportCsv").addEventListener("click", () => {
+  let csv = "단어,뜻\n";
+  currentWords.forEach(w => {
+    csv += `${w.word},${w.meaning}\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "words.csv";
+  a.click();
+});
+
+// 처음으로
+document.querySelector("#btnBackHome").addEventListener("click", () => {
+  showStep("step1");
+});
