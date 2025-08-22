@@ -74,6 +74,11 @@ function updateStudyUI() {
   document.querySelector("#studyMeaning").textContent = w.meaning;
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
+
+  // ✅ 단어 자동 발음 실행
+  const utter = new SpeechSynthesisUtterance(w.word);
+  utter.lang = "en-US";
+  speechSynthesis.speak(utter);
 }
 
 document.querySelector("#btnPrev").addEventListener("click", () => {
@@ -83,10 +88,12 @@ document.querySelector("#btnNext").addEventListener("click", () => {
   if (studyIndex < currentWords.length - 1) { studyIndex++; updateStudyUI(); }
 });
 
+// 수동 발음 버튼
 document.querySelector("#btnSpeak").addEventListener("click", () => {
   const word = document.querySelector("#studyWord").textContent;
   const utter = new SpeechSynthesisUtterance(word);
-  utter.lang = "en-US"; speechSynthesis.speak(utter);
+  utter.lang = "en-US"; 
+  speechSynthesis.speak(utter);
 });
 
 document.querySelector("#btnGoQuiz").addEventListener("click", () => {
