@@ -52,6 +52,21 @@ loadIndex();
 
 // -------------------------------
 // 세트 선택 버튼
+// 현재 선택된 preset을 불러오는 공통 함수
+async function loadSelectedSet() {
+  const file = presetSelect.value;
+  if (!file) return false;
+  try {
+    const res = await fetch(`./data/${file}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`세트를 불러오지 못했습니다: HTTP ${res.status}`);
+    const words = await res.json();
+    useWords(words, file.replace(/\.json$/i, ''));
+    return true;
+  } catch (e) {
+    alert(e.message || '세트를 불러오지 못했습니다.');
+    return false;
+  }
+}
 let selectedFile = "";
 document.querySelector("#btnUsePreset").addEventListener("click", () => {
   const val = document.querySelector("#presetSelect").value;
@@ -226,3 +241,4 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 document.querySelector("#btnBackHome").addEventListener("click", () => {
   showStep("step1");
 });
+
