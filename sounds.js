@@ -1,14 +1,14 @@
 // 간단한 효과음 헬퍼
 window.Sounds = (() => {
-  const ok = document.getElementById('correctSound'); // ✅ HTML과 일치
-  const ng = document.getElementById('wrongSound');   // ✅ HTML과 일치
+  const ok = document.getElementById('correctSound'); // id 맞춤
+  const ng = document.getElementById('wrongSound');   // id 맞춤
   if (ok) ok.volume = 0.7;
   if (ng) ng.volume = 0.7;
 
-  function play(el){
+  async function play(el){
     try{
       el.currentTime = 0;
-      el.play();
+      await el.play();
     }catch(e){
       console.warn("Sound play failed", e);
     }
@@ -18,6 +18,3 @@ window.Sounds = (() => {
     fail(){ ng && play(ng); }
   };
 })();
-
-
-
