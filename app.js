@@ -204,7 +204,6 @@ document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   currentWords = [...wrongList];  
 
   // 새 퀴즈 준비 (오답 다시 수집)
-  wrongList = [];  
   quizIndex = 0;
   correctCount = 0;
   wrongCount = 0;
@@ -236,3 +235,4 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
