@@ -75,7 +75,7 @@ function updateStudyUI() {
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
 
-  // ✅ 발음
+  // ✅ 발음 (2번 읽기)
   const utter1 = new SpeechSynthesisUtterance(w.word);
   utter1.lang = "en-US";
   utter1.pitch = 1;
@@ -108,12 +108,13 @@ document.querySelector("#btnSpeak").addEventListener("click", () => {
 });
 
 document.querySelector("#btnGoQuiz").addEventListener("click", () => {
-  startQuiz(); showStep("step4");
+  startQuiz();
+  showStep("step4");
 });
 
 function startQuiz() {
-  quizIndex = 0; 
-  correctCount = 0; 
+  quizIndex = 0;
+  correctCount = 0;
   wrongCount = 0;
   updateQuizUI();
 }
@@ -195,22 +196,30 @@ function showResult() {
   document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
 }
 
-// ✅ 오답 다시 풀기 수정
+// ✅ 오답 다시 풀기 (반복 루프)
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
 
-  currentWords = [...wrongList];   // 새로운 배열로 복사
-  wrongList = [];                  // 다시 풀기 전에 초기화
-  quizIndex = 0;                   // 첫 문제부터 시작
+  // 오답만 새로운 세트로 설정
+  currentWords = [...wrongList];  
 
-  startQuiz(); 
+  // 새 퀴즈 준비 (오답 다시 수집)
+  wrongList = [];  
+  quizIndex = 0;
+  correctCount = 0;
+  wrongCount = 0;
+
+  startQuiz();
   showStep("step4");
 });
 
 document.querySelector("#btnNextBatch").addEventListener("click", () => {
   batchStart += batchSize;
   if (batchStart < allWords.length) {
-    loadBatch(); studyIndex = 0; updateStudyUI(); showStep("step3");
+    loadBatch(); 
+    studyIndex = 0; 
+    updateStudyUI(); 
+    showStep("step3");
   } else {
     alert("모든 단어 학습을 완료했습니다!");
     showStep("step1");
