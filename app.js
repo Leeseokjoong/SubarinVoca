@@ -75,27 +75,22 @@ function updateStudyUI() {
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
 
-  // ✅ 첫 번째 발음
+  // ✅ 발음
   const utter1 = new SpeechSynthesisUtterance(w.word);
   utter1.lang = "en-US";
-  utter1.pitch = 1; // 기본값
+  utter1.pitch = 1;
 
-  // ✅ 두 번째 발음 (살짝 변화를 줌 → 무시되지 않음)
   const utter2 = new SpeechSynthesisUtterance(w.word);
   utter2.lang = "en-US";
-  utter2.pitch = 1.05; // 아주 조금 차이
+  utter2.pitch = 1.05;
 
-  // 첫 번째 발음 끝나면 두 번째 발음 실행
   utter1.onend = () => {
     speechSynthesis.speak(utter2);
   };
 
-  // 실행
-  speechSynthesis.cancel(); // 혹시 남아있는 발음 취소
+  speechSynthesis.cancel();
   speechSynthesis.speak(utter1);
 }
-
-
 
 document.querySelector("#btnPrev").addEventListener("click", () => {
   if (studyIndex > 0) { studyIndex--; updateStudyUI(); }
@@ -117,7 +112,9 @@ document.querySelector("#btnGoQuiz").addEventListener("click", () => {
 });
 
 function startQuiz() {
-  quizIndex = 0; wrongList = []; correctCount = 0; wrongCount = 0;
+  quizIndex = 0; 
+  correctCount = 0; 
+  wrongCount = 0;
   updateQuizUI();
 }
 
@@ -150,27 +147,20 @@ function handleAnswer(correct, btn) {
   if (correct) { 
     correctCount++; 
     btn.classList.add("correct"); 
-
-    // 🎵 정답 효과음
     if (window.Sounds && typeof window.Sounds.success === "function") {
       window.Sounds.success();
     }
-
   } else { 
     wrongCount++; 
     wrongList.push(currentWords[quizIndex]); 
     btn.classList.add("wrong"); 
-
-    // 🎵 오답 효과음
     if (window.Sounds && typeof window.Sounds.fail === "function") {
       window.Sounds.fail();
     }
   }
 
-  // 현재 문제의 버튼 모두 비활성화
   document.querySelectorAll(".choice").forEach(b => b.disabled = true);
 
-  // ⏳ 0.8초 뒤 자동으로 다음 문제 이동
   setTimeout(() => {
     if (quizIndex < currentWords.length - 1) {
       quizIndex++;
@@ -180,9 +170,6 @@ function handleAnswer(correct, btn) {
     }
   }, 800);
 }
-
-
-
 
 document.querySelector("#btnNextQuiz").addEventListener("click", () => {
   if (quizIndex < currentWords.length - 1) { quizIndex++; updateQuizUI(); }
@@ -208,9 +195,16 @@ function showResult() {
   document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
 }
 
+// ✅ 오답 다시 풀기 수정
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
-  currentWords = wrongList; startQuiz(); showStep("step4");
+
+  currentWords = [...wrongList];   // 새로운 배열로 복사
+  wrongList = [];                  // 다시 풀기 전에 초기화
+  quizIndex = 0;                   // 첫 문제부터 시작
+
+  startQuiz(); 
+  showStep("step4");
 });
 
 document.querySelector("#btnNextBatch").addEventListener("click", () => {
@@ -233,11 +227,3 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
-
-
-
-
-
-
-
-
