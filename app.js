@@ -75,18 +75,18 @@ function updateStudyUI() {
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
 
-  // ✅ 단어 자동 발음 (2번 읽기)
-  const utter1 = new SpeechSynthesisUtterance(w.word);
-  const utter2 = new SpeechSynthesisUtterance(w.word);
-  utter1.lang = "en-US";
-  utter2.lang = "en-US";
+  // ✅ 단어 자동 발음 (2번 읽기, 타이머 사용)
+  const utter = new SpeechSynthesisUtterance(w.word);
+  utter.lang = "en-US";
+  speechSynthesis.speak(utter);
 
-  utter1.onend = () => {
+  setTimeout(() => {
+    const utter2 = new SpeechSynthesisUtterance(w.word);
+    utter2.lang = "en-US";
     speechSynthesis.speak(utter2);
-  };
-
-  speechSynthesis.speak(utter1);
+  }, 800); // 0.8초 후 두 번째 발음 (필요시 시간 조절)
 }
+
 
 document.querySelector("#btnPrev").addEventListener("click", () => {
   if (studyIndex > 0) { studyIndex--; updateStudyUI(); }
@@ -210,6 +210,7 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
 
 
 
