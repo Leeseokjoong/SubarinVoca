@@ -112,12 +112,10 @@ document.querySelector("#btnGoQuiz").addEventListener("click", () => {
   showStep("step4");
 });
 
-// ✅ 퀴즈 시작 (라운드마다 wrongList 초기화)
 function startQuiz() {
   quizIndex = 0;
   correctCount = 0;
   wrongCount = 0;
-  wrongList = [];  // 각 라운드 시작할 때 새 오답 수집
   updateQuizUI();
 }
 
@@ -205,7 +203,13 @@ document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   // 오답만 새로운 세트로 설정
   currentWords = wrongList.slice();
 
-  startQuiz();  // 여기서 wrongList 새로 초기화됨
+  // 새로운 라운드 시작 전 초기화
+  wrongList = [];
+  quizIndex = 0;
+  correctCount = 0;
+  wrongCount = 0;
+
+  startQuiz();
   showStep("step4");
 });
 
