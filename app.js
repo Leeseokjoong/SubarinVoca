@@ -92,6 +92,7 @@ function updateStudyUI() {
   speechSynthesis.speak(utter1);
 }
 
+// 학습 화면 버튼
 document.querySelector("#btnPrev").addEventListener("click", () => {
   if (studyIndex > 0) { studyIndex--; updateStudyUI(); }
 });
@@ -107,6 +108,7 @@ document.querySelector("#btnSpeak").addEventListener("click", () => {
   speechSynthesis.speak(utter);
 });
 
+// 퀴즈 시작
 document.querySelector("#btnGoQuiz").addEventListener("click", () => {
   startQuiz();
   showStep("step4");
@@ -196,14 +198,15 @@ function showResult() {
   document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
 }
 
-// ✅ 오답 다시 풀기 (반복 루프)
+// ✅ 오답 다시 풀기 (무한 반복 가능)
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
 
   // 오답만 새로운 세트로 설정
   currentWords = [...wrongList];  
 
-  // 새 퀴즈 준비 (오답 다시 수집)
+  // 새 라운드 준비 → 이제 새 오답을 모아야 하므로 초기화
+  wrongList = [];  
   quizIndex = 0;
   correctCount = 0;
   wrongCount = 0;
@@ -212,6 +215,7 @@ document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   showStep("step4");
 });
 
+// 다음 묶음 학습
 document.querySelector("#btnNextBatch").addEventListener("click", () => {
   batchStart += batchSize;
   if (batchStart < allWords.length) {
@@ -225,14 +229,17 @@ document.querySelector("#btnNextBatch").addEventListener("click", () => {
   }
 });
 
+// CSV 내보내기
 document.querySelector("#btnExportCsv").addEventListener("click", () => {
   let csv = "단어,뜻\n";
   currentWords.forEach(w => { csv += `${w.word},${w.meaning}\n`; });
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "words.csv"; a.click();
+  a.href = url; 
+  a.download = "words.csv"; 
+  a.click();
 });
 
+// 홈으로 돌아가기
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
-
