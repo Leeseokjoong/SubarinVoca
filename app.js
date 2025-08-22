@@ -10,6 +10,7 @@ let wrongList = [];
 let correctCount = 0;
 let wrongCount = 0;
 let batchSize = 30; // ✅ 한 번에 학습할 단어 수
+let selectedFile = "";
 
 // 화면 전환 함수
 function showStep(step) {
@@ -52,22 +53,6 @@ loadIndex();
 
 // -------------------------------
 // 세트 선택 버튼
-// 현재 선택된 preset을 불러오는 공통 함수
-async function loadSelectedSet() {
-  const file = presetSelect.value;
-  if (!file) return false;
-  try {
-    const res = await fetch(`./data/${file}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`세트를 불러오지 못했습니다: HTTP ${res.status}`);
-    const words = await res.json();
-    useWords(words, file.replace(/\.json$/i, ''));
-    return true;
-  } catch (e) {
-    alert(e.message || '세트를 불러오지 못했습니다.');
-    return false;
-  }
-}
-let selectedFile = "";
 document.querySelector("#btnUsePreset").addEventListener("click", () => {
   const val = document.querySelector("#presetSelect").value;
   if (!val) {
@@ -81,7 +66,10 @@ document.querySelector("#btnUsePreset").addEventListener("click", () => {
 // -------------------------------
 // Step2 → Step3 (학습 시작)
 document.querySelector("#btnStartStudy").addEventListener("click", async () => {
-  if (!selectedFile) return;
+  if (!selectedFile) {
+    alert("세트를 먼저 선택하세요.");
+    return;
+  }
   try {
     const res = await fetch("./data/" + selectedFile);
     const allWords = await res.json();
@@ -165,7 +153,7 @@ function updateQuizUI() {
     btn.textContent = choice;
     btn.className = "btn choice";
     btn.addEventListener("click", () => {
-      handleAnswer(choice === w.meaning);
+      handleAnswer(choice === w.meaning, btn);
     });
     choiceList.appendChild(btn);
   });
@@ -175,14 +163,16 @@ function updateQuizUI() {
   document.querySelector("#btnNextQuiz").disabled = true;
 }
 
-function handleAnswer(correct) {
+function handleAnswer(correct, btn) {
   if (correct) {
     correctCount++;
+    btn.classList.add("correct");
   } else {
     wrongCount++;
     wrongList.push(currentWords[quizIndex]);
+    btn.classList.add("wrong");
   }
-  document.querySelectorAll(".choice").forEach(btn => btn.disabled = true);
+  document.querySelectorAll(".choice").forEach(b => b.disabled = true);
   document.querySelector("#btnNextQuiz").disabled = false;
 }
 
@@ -241,4 +231,3 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 document.querySelector("#btnBackHome").addEventListener("click", () => {
   showStep("step1");
 });
-
