@@ -131,10 +131,27 @@ function updateQuizUI() {
 }
 
 function handleAnswer(correct, btn) {
-  if (correct) { correctCount++; btn.classList.add("correct"); }
-  else { wrongCount++; wrongList.push(currentWords[quizIndex]); btn.classList.add("wrong"); }
+  if (correct) { 
+    correctCount++; 
+    btn.classList.add("correct"); 
+  } else { 
+    wrongCount++; 
+    wrongList.push(currentWords[quizIndex]); 
+    btn.classList.add("wrong"); 
+  }
+
+  // 현재 문제의 버튼 모두 비활성화
   document.querySelectorAll(".choice").forEach(b => b.disabled = true);
-  document.querySelector("#btnNextQuiz").disabled = false;
+
+  // ⏳ 0.8초 뒤 자동으로 다음 문제 이동
+  setTimeout(() => {
+    if (quizIndex < currentWords.length - 1) {
+      quizIndex++;
+      updateQuizUI();
+    } else {
+      showResult();
+    }
+  }, 800);
 }
 
 document.querySelector("#btnNextQuiz").addEventListener("click", () => {
@@ -186,3 +203,4 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
