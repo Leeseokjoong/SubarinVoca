@@ -75,17 +75,26 @@ function updateStudyUI() {
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
 
-  // ✅ 단어 자동 발음 (2번 읽기, 타이머 사용)
-  const utter = new SpeechSynthesisUtterance(w.word);
-  utter.lang = "en-US";
-  speechSynthesis.speak(utter);
+  // ✅ 첫 번째 발음
+  const utter1 = new SpeechSynthesisUtterance(w.word);
+  utter1.lang = "en-US";
+  utter1.pitch = 1; // 기본값
 
-  setTimeout(() => {
-    const utter2 = new SpeechSynthesisUtterance(w.word);
-    utter2.lang = "en-US";
+  // ✅ 두 번째 발음 (살짝 변화를 줌 → 무시되지 않음)
+  const utter2 = new SpeechSynthesisUtterance(w.word);
+  utter2.lang = "en-US";
+  utter2.pitch = 1.05; // 아주 조금 차이
+
+  // 첫 번째 발음 끝나면 두 번째 발음 실행
+  utter1.onend = () => {
     speechSynthesis.speak(utter2);
-  }, 800); // 0.8초 후 두 번째 발음 (필요시 시간 조절)
+  };
+
+  // 실행
+  speechSynthesis.cancel(); // 혹시 남아있는 발음 취소
+  speechSynthesis.speak(utter1);
 }
+
 
 
 document.querySelector("#btnPrev").addEventListener("click", () => {
@@ -210,6 +219,7 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
 
 
 
