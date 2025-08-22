@@ -150,10 +150,21 @@ function handleAnswer(correct, btn) {
   if (correct) { 
     correctCount++; 
     btn.classList.add("correct"); 
+
+    // 🎵 정답 효과음
+    if (window.sounds && typeof window.sounds.success === "function") {
+      window.sounds.success();
+    }
+
   } else { 
     wrongCount++; 
     wrongList.push(currentWords[quizIndex]); 
     btn.classList.add("wrong"); 
+
+    // 🎵 오답 효과음
+    if (window.sounds && typeof window.sounds.fail === "function") {
+      window.sounds.fail();
+    }
   }
 
   // 현재 문제의 버튼 모두 비활성화
@@ -169,6 +180,7 @@ function handleAnswer(correct, btn) {
     }
   }, 800);
 }
+
 
 document.querySelector("#btnNextQuiz").addEventListener("click", () => {
   if (quizIndex < currentWords.length - 1) { quizIndex++; updateQuizUI(); }
@@ -219,6 +231,7 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
 
 
 
