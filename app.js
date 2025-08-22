@@ -112,10 +112,12 @@ document.querySelector("#btnGoQuiz").addEventListener("click", () => {
   showStep("step4");
 });
 
+// ✅ 퀴즈 시작 (라운드마다 wrongList 초기화)
 function startQuiz() {
   quizIndex = 0;
   correctCount = 0;
   wrongCount = 0;
+  wrongList = [];  // 각 라운드 시작할 때 새 오답 수집
   updateQuizUI();
 }
 
@@ -196,20 +198,14 @@ function showResult() {
   document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
 }
 
-// ✅ 오답 다시 풀기 (여전히 틀린 것만 반복)
+// ✅ 오답 다시 풀기 (무한 반복 가능)
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
 
-  // 현재 라운드 오답만 새로운 세트로 설정
-  currentWords = wrongList.slice();  
+  // 오답만 새로운 세트로 설정
+  currentWords = wrongList.slice();
 
-  // 다음 라운드를 위해 wrongList 비움 (이번 라운드에서 다시 채워짐)
-  wrongList = [];  
-  quizIndex = 0;
-  correctCount = 0;
-  wrongCount = 0;
-
-  startQuiz();
+  startQuiz();  // 여기서 wrongList 새로 초기화됨
   showStep("step4");
 });
 
