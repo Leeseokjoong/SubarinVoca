@@ -1,7 +1,7 @@
 // 간단한 효과음 헬퍼
 window.Sounds = (() => {
-  const ok = document.getElementById('correctSound');
-  const ng = document.getElementById('wrongSound');
+  const ok = document.getElementById('correct');
+  const ng = document.getElementById('wrong');
   if (ok) ok.volume = 0.7;
   if (ng) ng.volume = 0.7;
 
@@ -16,3 +16,4 @@ window.Sounds = (() => {
     fail(){ ng && play(ng); }
   };
 })();
+
