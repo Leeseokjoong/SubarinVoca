@@ -152,8 +152,8 @@ function handleAnswer(correct, btn) {
     btn.classList.add("correct"); 
 
     // 🎵 정답 효과음
-    if (window.sounds && typeof window.sounds.success === "function") {
-      window.sounds.success();
+    if (window.Sounds && typeof window.Sounds.success === "function") {
+      window.Sounds.success();
     }
 
   } else { 
@@ -162,8 +162,8 @@ function handleAnswer(correct, btn) {
     btn.classList.add("wrong"); 
 
     // 🎵 오답 효과음
-    if (window.sounds && typeof window.sounds.fail === "function") {
-      window.sounds.fail();
+    if (window.Sounds && typeof window.Sounds.fail === "function") {
+      window.Sounds.fail();
     }
   }
 
@@ -180,6 +180,8 @@ function handleAnswer(correct, btn) {
     }
   }, 800);
 }
+
+
 
 
 document.querySelector("#btnNextQuiz").addEventListener("click", () => {
@@ -231,6 +233,7 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
 
 
 
