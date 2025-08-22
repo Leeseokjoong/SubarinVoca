@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>영단어 학습 프로그램</title>
+  <title>수브레인 영단어 학습 프로그램</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="app-header">
-    <h1>영단어 학습 프로그램</h1>
+    <h1>수브레인 영단어 학습 프로그램</h1>
     <p class="subtitle">세트를 선택하고 학습을 시작하세요.</p>
   </header>
 
@@ -93,6 +93,11 @@
     <p>© 2025 단어 학습 프로그램</p>
   </footer>
 
+  <!-- ✅ 정답/오답 효과음 추가 -->
+  <audio id="correctSound" src="./sounds/correct.mp3"></audio>
+  <audio id="wrongSound" src="./sounds/wrong.mp3"></audio>
+
+  <script src="./sounds.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
