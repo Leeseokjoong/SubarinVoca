@@ -32,6 +32,7 @@
   { "name": "중3 YBM 6과 단어", "file": "m3-Ybm06.json" },
   { "name": "중3 YBM 7과 단어", "file": "m3-Ybm07.json" },
   { "name": "중3 YBM 8과 단어", "file": "m3-Ybm08.json" },
+  { "name": "초등 샘플 단어 10개", "file": "e1-sample.json" },
 
   { "name": "샘플 단어", "file": "words-sample.json" }
 ]
