@@ -1,0 +1,72 @@
+[
+  {
+    "word": "apple",
+    "meaning": "사과",
+    "image": "images/apple.png",
+    "example": "I eat an apple.",
+    "koreanExample": "나는 사과를 먹어요."
+  },
+  {
+    "word": "dog",
+    "meaning": "개",
+    "image": "images/dog.png",
+    "example": "The dog is big.",
+    "koreanExample": "그 개는 커요."
+  },
+  {
+    "word": "book",
+    "meaning": "책",
+    "image": "images/book.png",
+    "example": "This is my book.",
+    "koreanExample": "이것은 내 책이에요."
+  },
+  {
+    "word": "cat",
+    "meaning": "고양이",
+    "image": "images/cat.png",
+    "example": "The cat is cute.",
+    "koreanExample": "그 고양이는 귀여워요."
+  },
+  {
+    "word": "sun",
+    "meaning": "태양",
+    "image": "images/sun.png",
+    "example": "The sun is bright.",
+    "koreanExample": "태양은 밝아요."
+  },
+  {
+    "word": "ball",
+    "meaning": "공",
+    "image": "images/ball.png",
+    "example": "Kick the ball.",
+    "koreanExample": "공을 차세요."
+  },
+  {
+    "word": "water",
+    "meaning": "물",
+    "image": "images/water.png",
+    "example": "I drink water.",
+    "koreanExample": "나는 물을 마셔요."
+  },
+  {
+    "word": "chair",
+    "meaning": "의자",
+    "image": "images/chair.png",
+    "example": "Sit on the chair.",
+    "koreanExample": "의자에 앉으세요."
+  },
+  {
+    "word": "school",
+    "meaning": "학교",
+    "image": "images/school.png",
+    "example": "I go to school.",
+    "koreanExample": "나는 학교에 가요."
+  },
+  {
+    "word": "fish",
+    "meaning": "물고기",
+    "image": "images/fish.png",
+    "example": "A fish swims fast.",
+    "koreanExample": "물고기가 빨리 헤엄쳐요."
+  }
+]
