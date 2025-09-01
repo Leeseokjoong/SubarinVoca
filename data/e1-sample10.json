@@ -1,0 +1,12 @@
+[
+  { "word": "run", "meaning": "달리다", "ascii": ["  o/", " /| ", " / \\"] },
+  { "word": "jump", "meaning": "점프하다", "ascii": ["   o", "  /|\\", "   | ", "  / \\"] },
+  { "word": "swim", "meaning": "수영하다", "ascii": [" ~o~", " /| ", " / \\"] },
+  { "word": "read", "meaning": "읽다", "ascii": [" (BOOK)", "  (•‿•)"] },
+  { "word": "write", "meaning": "쓰다", "ascii": [" ✎", " | |"] },
+  { "word": "sing", "meaning": "노래하다", "ascii": [" (•♪)", "  /|\\", "  / \\"] },
+  { "word": "dance", "meaning": "춤추다", "ascii": [" \\o/", "  | ", " / \\"] },
+  { "word": "play", "meaning": "놀다", "ascii": [" \\o/", "  | ", " / \\"] },
+  { "word": "eat", "meaning": "먹다", "ascii": [" ( • ᴥ •)", "   (🍎)"] },
+  { "word": "sleep", "meaning": "자다", "ascii": ["  zZZ", " ( -_-)"] }
+]
