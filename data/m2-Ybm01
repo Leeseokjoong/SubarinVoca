@@ -1,6 +1,4 @@
-{
-  "unit": 8,
-  "words": [
+[
     { "word": "matter", "meaning": "문제" },
     { "word": "break", "meaning": "고장 내다" },
     { "word": "spend", "meaning": "(돈을) 쓰다" },
@@ -73,9 +71,7 @@
     { "word": "school nurse", "meaning": "양호 선생님" },
     { "word": "nervous", "meaning": "긴장한" },
     { "word": "helpful", "meaning": "도움이 되는" },
-    { "word": "wisely", "meaning": "현명하게" }
-  ],
-  "phrases": [
+    { "word": "wisely", "meaning": "현명하게" },
     { "word": "make friends with", "meaning": "~와 친구가 되다" },
     { "word": "these days", "meaning": "요즘" },
     { "word": "set the alarm", "meaning": "알람 시계를 맞추다" },
