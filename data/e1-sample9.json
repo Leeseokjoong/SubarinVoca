@@ -1,0 +1,12 @@
+[
+  { "word": "father", "meaning": "아버지", "ascii": ["  (•‿•)", "   /|\\", "   / \\"] },
+  { "word": "mother", "meaning": "어머니", "ascii": ["  (•◡•)", "   /|\\", "   / \\"] },
+  { "word": "brother", "meaning": "형제", "ascii": [" (•ᴗ•)", "  /|\\", "  / \\"] },
+  { "word": "sister", "meaning": "자매", "ascii": [" (•ω•)", "  /|\\", "  / \\"] },
+  { "word": "grandpa", "meaning": "할아버지", "ascii": [" (•͡˘◡˘•͡ )", "    /|\\", "    / \\"] },
+  { "word": "grandma", "meaning": "할머니", "ascii": [" (•͡˘⌣˘•͡ )", "    /|\\", "    / \\"] },
+  { "word": "family", "meaning": "가족", "ascii": [" [FAMILY]"] },
+  { "word": "baby", "meaning": "아기", "ascii": [" (o◡o)", "  /|\\", "  / \\"] },
+  { "word": "uncle", "meaning": "삼촌", "ascii": [" (•_•)", "  /|\\", "  / \\"] },
+  { "word": "aunt", "meaning": "이모", "ascii": [" (•‿◡‿•)", "   /|\\", "   / \\"] }
+]
