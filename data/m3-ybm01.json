@@ -1,6 +1,4 @@
-{
-  "name": "중3 YBM 1과 단어",
-  "words": [
+[
     { "word": "surfing", "meaning": "서핑" },
     { "word": "humorous", "meaning": "유머러스한" },
     { "word": "hero", "meaning": "영웅" },
@@ -56,4 +54,3 @@
     { "word": "advise on", "meaning": "~에 대해 조언하다" },
     { "word": "related to", "meaning": "~와 관련된" }
   ]
-}
