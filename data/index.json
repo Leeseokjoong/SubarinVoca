@@ -8,6 +8,13 @@
   { "name": "중1 YBM 7과 단어", "file": "m1-Ybm07.json" },
   { "name": "중1 YBM 8과 단어", "file": "m1-Ybm08.json" },
 
+  { "name": "중1 동아윤 1과 단어", "file": "m1-DongAYun01.json" },
+  { "name": "중1 동아윤 2과 단어", "file": "m1-DongAYun02.json" },
+  { "name": "중1 동아윤 3과 단어", "file": "m1-DongAYun03.json" },
+  { "name": "중1 동아윤 4과 단어", "file": "m1-DongAYun04.json" },
+  { "name": "중1 동아윤 5과 단어", "file": "m1-DongAYun05.json" },
+
+  
   { "name": "중2 YBM 1과 단어", "file": "m2-Ybm01.json" },
   { "name": "중2 YBM 2과 단어", "file": "m2-Ybm02.json" },
   { "name": "중2 YBM 3과 단어", "file": "m2-Ybm03.json" },
