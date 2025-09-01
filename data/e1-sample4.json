@@ -1,0 +1,12 @@
+[
+  { "word": "milk", "meaning": "우유", "ascii": ["  ______", " |      |", " | MILK |", " |______|"] },
+  { "word": "egg", "meaning": "달걀", "ascii": ["  (   )", "   '-'"] },
+  { "word": "door", "meaning": "문", "ascii": ["  _____", " |     |", " |     |", " |_____|"] },
+  { "word": "hand", "meaning": "손", "ascii": [" o/", "/| ", " | "] },
+  { "word": "milk", "meaning": "우유", "ascii": ["  ____", " |MILK|", " |____|"] },
+  { "word": "toy", "meaning": "장난감", "ascii": [" [TOY]", "  |||"] },
+  { "word": "clock", "meaning": "시계", "ascii": ["  .--.", " (12 )", " ( 6 )", "  '--'"] },
+  { "word": "rain", "meaning": "비", "ascii": ["  .-. ", " ( R )", "  '-'"] },
+  { "word": "snow", "meaning": "눈", "ascii": ["  * *", " * * *", "  * *"] },
+  { "word": "egg", "meaning": "알", "ascii": [" ( o )"] }
+]
