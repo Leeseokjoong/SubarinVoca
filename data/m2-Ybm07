@@ -1,6 +1,4 @@
-{
-  "unit": 7,
-  "words": [
+[
     { "word": "important", "meaning": "중요한" },
     { "word": "importance", "meaning": "중요성" },
     { "word": "advice", "meaning": "충고" },
@@ -92,4 +90,4 @@
     { "word": "tell the difference", "meaning": "차이를 구별하다" },
     { "word": "shake hands", "meaning": "악수하다" }
   ]
-}
+
