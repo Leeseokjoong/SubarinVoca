@@ -1,4 +1,14 @@
 [
+  { "name": "초등 샘플 단어 10개 (3)", "file": "e1-sample3.json" },
+  { "name": "초등 샘플 단어 10개 (4)", "file": "e1-sample4.json" },
+  { "name": "초등 샘플 단어 10개 (5)", "file": "e1-sample5.json" },
+  { "name": "초등 샘플 단어 10개 (6)", "file": "e1-sample6.json" },
+  { "name": "초등 샘플 단어 10개 (7)", "file": "e1-sample7.json" },
+  { "name": "초등 샘플 단어 10개 (8)", "file": "e1-sample8.json" },
+  { "name": "초등 샘플 단어 10개 (9)", "file": "e1-sample9.json" },
+  { "name": "초등 샘플 단어 10개 (10)", "file": "e1-sample10.json" },
+
+  
   { "name": "중1 YBM 1과 단어", "file": "m1-Ybm01.json" },
   { "name": "중1 YBM 2과 단어", "file": "m1-Ybm02.json" },
   { "name": "중1 YBM 3과 단어", "file": "m1-Ybm03.json" },
