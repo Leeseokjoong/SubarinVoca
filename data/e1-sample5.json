@@ -1,0 +1,12 @@
+[
+  { "word": "book", "meaning": "책", "ascii": [".-=====-.", "| BOOK |", "'-----'"] },
+  { "word": "desk", "meaning": "책상", "ascii": [" ______", "| DESK |", " ‾‾‾‾‾‾"] },
+  { "word": "chair", "meaning": "의자", "ascii": ["  ___", " |   |", " |___|", "  || "] },
+  { "word": "plate", "meaning": "접시", "ascii": ["  .---.", " (     )", "  '---'"] },
+  { "word": "fork", "meaning": "포크", "ascii": [" ||| ", " ||| ", " ||| "] },
+  { "word": "spoon", "meaning": "숟가락", "ascii": ["  ()", "  ||", "  ||"] },
+  { "word": "knife", "meaning": "칼", "ascii": ["  ||", "  ||", "  ||"] },
+  { "word": "table", "meaning": "식탁", "ascii": ["  ____", " |    |", " |____|"] },
+  { "word": "ball", "meaning": "공", "ascii": ["  .--.", " (    )", "  '--'"] },
+  { "word": "lamp", "meaning": "등", "ascii": ["   ()", "  /||\\", "   ||"] }
+]
