@@ -1,0 +1,12 @@
+[
+  { "word": "pen", "meaning": "펜", "ascii": ["   __", "  /  \\", " |    |", "  \\__/"] },
+  { "word": "cup", "meaning": "컵", "ascii": ["  (   )", "   ) (", "  (   )", "   `-'"] },
+  { "word": "bus", "meaning": "버스", "ascii": [" _______", "|__[]__|", " ( o_o )"] },
+  { "word": "moon", "meaning": "달", "ascii": ["   _..._", " .'     '", " |       ", "  '._._.'"] },
+  { "word": "hat", "meaning": "모자", "ascii": ["   ____", "  /____\\", "   ||||"] },
+  { "word": "map", "meaning": "지도", "ascii": ["  .----.", " / MAP /", " '----'"] },
+  { "word": "shoe", "meaning": "신발", "ascii": ["   ____", " _|__|_", " |    |"] },
+  { "word": "bag", "meaning": "가방", "ascii": ["  .--.", " /    \\", " |BAG |", " '----'"] },
+  { "word": "key", "meaning": "열쇠", "ascii": ["   ___", "  / o \\", "  \\___/--"] },
+  { "word": "bed", "meaning": "침대", "ascii": ["  |----|", " [ BED ]", "  '----'"] }
+]
