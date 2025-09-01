@@ -12,9 +12,34 @@ let batchSize = 30;
 let selectedFile = "";
 let batchStart = 0;
 
+// 공통: 화면 전환
 function showStep(step) {
-  document.querySelectorAll(".screen").forEach(sec => sec.style.display = "none");
-  document.querySelector("#" + step).style.display = "block";
+  document.querySelectorAll(".screen").forEach(sec => (sec.style.display = "none"));
+  const el = document.querySelector("#" + step);
+  if (el) el.style.display = "block";
+}
+
+// 공통: 안전한 발음 함수 (Web Speech API)
+function speakWord(word, { times = 1, lang = "en-US", rate = 0.9, pitch = 1.0 } = {}) {
+  if (!word || !("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    let count = 0;
+    const speakOnce = () => {
+      const u = new SpeechSynthesisUtterance(word);
+      u.lang = lang;
+      u.rate = rate;
+      u.pitch = pitch;
+      u.onend = () => {
+        count++;
+        if (count < times) speakOnce();
+      };
+      window.speechSynthesis.speak(u);
+    };
+    speakOnce();
+  } catch (e) {
+    console.warn("speech failed:", e);
+  }
 }
 
 // Step1 → Step2
@@ -38,7 +63,9 @@ async function loadIndex() {
       opt.textContent = set.name;
       select.appendChild(opt);
     });
-  } catch (err) { console.error("index.json 불러오기 실패", err); }
+  } catch (err) {
+    console.error("index.json 불러오기 실패", err);
+  }
 }
 loadIndex();
 
@@ -61,37 +88,44 @@ document.querySelector("#btnStartStudy").addEventListener("click", async () => {
     studyIndex = 0;
     updateStudyUI();
     showStep("step3");
-  } catch (err) { console.error("단어 파일 불러오기 실패", err); }
+  } catch (err) {
+    console.error("단어 파일 불러오기 실패", err);
+  }
 });
 
+// 현재 묶음 로드
 function loadBatch() {
   currentWords = allWords.slice(batchStart, batchStart + batchSize);
 }
 
+// 학습 화면 UI 업데이트 (+ 이미지 + 2회 읽기)
 function updateStudyUI() {
   const w = currentWords[studyIndex];
-  document.querySelector("#studyWord").textContent = w.word;
-  document.querySelector("#studyMeaning").textContent = w.meaning;
+  if (!w) return;
+
+  document.querySelector("#studyWord").textContent = w.word ?? "";
+  document.querySelector("#studyMeaning").textContent = w.meaning ?? "";
   document.querySelector("#studyIndex").textContent = studyIndex + 1;
   document.querySelector("#studyTotal").textContent = currentWords.length;
 
-  // ✅ 발음 (2번 읽기)
-  const utter1 = new SpeechSynthesisUtterance(w.word);
-  utter1.lang = "en-US";
-  utter1.pitch = 1;
+  // ✅ 학습 이미지 표시 (없으면 숨김)
+  const img = document.querySelector("#studyImage");
+  if (img) {
+    if (w.image) {
+      img.src = w.image;
+      img.style.display = "block";
+      img.alt = `${w.word} 이미지`;
+    } else {
+      img.removeAttribute("src");
+      img.style.display = "none";
+    }
+  }
 
-  const utter2 = new SpeechSynthesisUtterance(w.word);
-  utter2.lang = "en-US";
-  utter2.pitch = 1.05;
-
-  utter1.onend = () => {
-    speechSynthesis.speak(utter2);
-  };
-
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utter1);
+  // ✅ 발음(학습에서는 2번)
+  speakWord(w.word, { times: 2, rate: 0.95, pitch: 1.0 });
 }
 
+// 학습 이전/다음
 document.querySelector("#btnPrev").addEventListener("click", () => {
   if (studyIndex > 0) { studyIndex--; updateStudyUI(); }
 });
@@ -102,11 +136,10 @@ document.querySelector("#btnNext").addEventListener("click", () => {
 // 수동 발음 버튼
 document.querySelector("#btnSpeak").addEventListener("click", () => {
   const word = document.querySelector("#studyWord").textContent;
-  const utter = new SpeechSynthesisUtterance(word);
-  utter.lang = "en-US"; 
-  speechSynthesis.speak(utter);
+  speakWord(word, { times: 1, rate: 0.95 });
 });
 
+// 퀴즈 시작
 document.querySelector("#btnGoQuiz").addEventListener("click", () => {
   startQuiz();
   showStep("step4");
@@ -122,9 +155,11 @@ function startQuiz() {
 
 function updateQuizUI() {
   const w = currentWords[quizIndex];
+  if (!w) return;
+
   document.querySelector("#quizWord").textContent = w.word;
   const choices = [w.meaning];
-  while (choices.length < 4) {
+  while (choices.length < 4 && currentWords.length > choices.length) {
     const r = currentWords[Math.floor(Math.random() * currentWords.length)].meaning;
     if (!choices.includes(r)) choices.push(r);
   }
@@ -142,26 +177,31 @@ function updateQuizUI() {
 
   document.querySelector("#quizIndex").textContent = quizIndex + 1;
   document.querySelector("#quizTotal").textContent = currentWords.length;
+
+  // 기본은 자동 진행이므로 버튼은 비활성(기존 동작 유지)
   document.querySelector("#btnNextQuiz").disabled = true;
+
+  // ✅ 퀴즈 문제 표시 시 자동 발음 (1회)
+  speakWord(w.word, { times: 1, rate: 0.95 });
 }
 
 function handleAnswer(correct, btn) {
-  if (correct) { 
-    correctCount++; 
-    btn.classList.add("correct"); 
+  if (correct) {
+    correctCount++;
+    btn.classList.add("correct");
     if (window.Sounds && typeof window.Sounds.success === "function") {
       window.Sounds.success();
     }
-  } else { 
-    wrongCount++; 
-    wrongList.push(currentWords[quizIndex]); 
-    btn.classList.add("wrong"); 
+  } else {
+    wrongCount++;
+    wrongList.push(currentWords[quizIndex]);
+    btn.classList.add("wrong");
     if (window.Sounds && typeof window.Sounds.fail === "function") {
       window.Sounds.fail();
     }
   }
 
-  document.querySelectorAll(".choice").forEach(b => b.disabled = true);
+  document.querySelectorAll(".choice").forEach(b => (b.disabled = true));
 
   setTimeout(() => {
     if (quizIndex < currentWords.length - 1) {
@@ -195,16 +235,15 @@ function showResult() {
 
   document.querySelector("#btnRetryWrong").disabled = wrongList.length === 0;
 
-  const hasNext = (batchStart + batchSize < allWords.length);
+  const hasNext = batchStart + batchSize < allWords.length;
   document.querySelector("#btnNextBatch").disabled = !hasNext;
 
-  // ✅ 세트가 하나뿐이거나 마지막 세트라면 종료 메시지
   if (!hasNext) {
     showFinalMessage();
   }
 }
 
-// ✅ 오답 다시 풀기
+// 오답 다시 풀기
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
 
@@ -218,23 +257,23 @@ document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   showStep("step4");
 });
 
-// ✅ 다음 묶음 학습 or 종료
+// 다음 묶음 학습 or 종료
 document.querySelector("#btnNextBatch").addEventListener("click", () => {
   batchStart += batchSize;
   if (batchStart < allWords.length) {
-    loadBatch(); 
-    studyIndex = 0; 
-    updateStudyUI(); 
+    loadBatch();
+    studyIndex = 0;
+    updateStudyUI();
     showStep("step3");
   } else {
     showFinalMessage();
   }
 });
 
-// ✅ 종료 메시지 + 세트 진행률 (중복 id 없음, 액션버튼 숨김)
+// 종료 메시지
 function showFinalMessage() {
   const totalSets = Math.ceil(allWords.length / batchSize);
-  const finishedSets = totalSets; // 모두 완료된 상태
+  const finishedSets = totalSets;
 
   showStep("step5");
 
@@ -245,10 +284,11 @@ function showFinalMessage() {
     <p><strong>${finishedSets} / ${totalSets} 세트 완료</strong></p>
   `;
 
-  const actionsRow = document.querySelector('#step5 .row');
-  if (actionsRow) actionsRow.style.display = 'none';
+  const actionsRow = document.querySelector("#step5 .row");
+  if (actionsRow) actionsRow.style.display = "none";
 }
 
+// CSV 내보내기
 document.querySelector("#btnExportCsv").addEventListener("click", () => {
   let csv = "단어,뜻\n";
   currentWords.forEach(w => { csv += `${w.word},${w.meaning}\n`; });
@@ -258,4 +298,5 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
   a.href = url; a.download = "words.csv"; a.click();
 });
 
+// 처음으로
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
