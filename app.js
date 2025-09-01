@@ -220,18 +220,35 @@ document.querySelector("#btnNextBatch").addEventListener("click", () => {
   } else showFinalMessage();
 });
 
+// ✅ 마지막 세트에서도 버튼 행은 그대로 두고,
+//    "다음 묶음 학습" 버튼만 비활성화합니다.
 function showFinalMessage() {
-  const totalSets = Math.ceil(allWords.length / batchSize);
-  const card = document.querySelector("#step5 .card.big");
+  // 결과 화면으로 이동(이미 showResult에서 값 세팅 후 호출되는 구조)
   showStep("step5");
-  card.innerHTML = `
-    <h2>🎉 수고하셨습니다!</h2>
-    <p>모든 세트의 학습이 종료되었습니다.</p>
-    <p><strong>${totalSets} / ${totalSets} 세트 완료</strong></p>
-  `;
-  const actionsRow = document.querySelector("#step5 .row");
-  if (actionsRow) actionsRow.style.display = "none";
+
+  const card = document.querySelector("#step5 .card.big");
+
+  // 상단에 완료 배너가 없으면 만들어서 붙이기 (기존 통계/오답 영역은 그대로 보존)
+  let banner = card.querySelector(".final-banner");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.className = "final-banner";
+    banner.innerHTML = `
+      <h2>🎉 수고하셨습니다!</h2>
+      <p>모든 세트의 학습이 종료되었습니다.</p>
+    `;
+    card.insertBefore(banner, card.firstChild);
+  }
+
+  // ✅ "다음 묶음 학습" 버튼만 비활성화 (오답 다시 풀기/CSV/세트선택 버튼은 유지)
+  const nextBtn = document.querySelector("#btnNextBatch");
+  if (nextBtn) nextBtn.disabled = true;
+
+  // 오답 다시 풀기 버튼 상태는 현재 wrongList 기준 유지(필요 시 재확인)
+  const retryBtn = document.querySelector("#btnRetryWrong");
+  if (retryBtn) retryBtn.disabled = (wrongList.length === 0);
 }
+
 
 // CSV
 document.querySelector("#btnExportCsv").addEventListener("click", () => {
@@ -266,4 +283,5 @@ document.querySelector("#btnBackHome").addEventListener("click", () => {
   correctCount = 0;
   wrongCount = 0;
 });
+
 
