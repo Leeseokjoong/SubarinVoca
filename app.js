@@ -198,7 +198,7 @@ function showResult() {
   const hasNext = (batchStart + batchSize < allWords.length);
   document.querySelector("#btnNextBatch").disabled = !hasNext;
 
-  // ✅ 세트가 하나뿐이라면 결과 대신 종료 메시지 띄우기
+  // ✅ 세트가 하나뿐이거나 마지막 세트라면 종료 메시지
   if (!hasNext) {
     showFinalMessage();
   }
@@ -227,27 +227,26 @@ document.querySelector("#btnNextBatch").addEventListener("click", () => {
     updateStudyUI(); 
     showStep("step3");
   } else {
-    // ✅ 모든 세트 종료 → 종료 메시지
     showFinalMessage();
   }
 });
 
-// ✅ 종료 메시지 + 세트 진행률
+// ✅ 종료 메시지 + 세트 진행률 (중복 id 없음, 액션버튼 숨김)
 function showFinalMessage() {
   const totalSets = Math.ceil(allWords.length / batchSize);
-  const finishedSets = Math.ceil(batchStart / batchSize);
+  const finishedSets = totalSets; // 모두 완료된 상태
 
   showStep("step5");
+
   const card = document.querySelector("#step5 .card.big");
   card.innerHTML = `
     <h2>🎉 수고하셨습니다!</h2>
     <p>모든 세트의 학습이 종료되었습니다.</p>
     <p><strong>${finishedSets} / ${totalSets} 세트 완료</strong></p>
-    <button id="btnBackHome" class="btn ghost">처음으로</button>
   `;
-  document.querySelector("#btnBackHome").addEventListener("click", () => {
-    showStep("step1");
-  });
+
+  const actionsRow = document.querySelector('#step5 .row');
+  if (actionsRow) actionsRow.style.display = 'none';
 }
 
 document.querySelector("#btnExportCsv").addEventListener("click", () => {
@@ -260,4 +259,3 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
-
