@@ -116,6 +116,7 @@ function startQuiz() {
   quizIndex = 0;
   correctCount = 0;
   wrongCount = 0;
+  wrongList = [];
   updateQuizUI();
 }
 
@@ -196,14 +197,11 @@ function showResult() {
   document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
 }
 
-// ✅ 오답 다시 풀기 (무한 반복 가능)
+// ✅ 오답 다시 풀기
 document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   if (wrongList.length === 0) return;
 
-  // 오답만 새로운 세트로 설정
   currentWords = wrongList.slice();
-
-  // 새로운 라운드 시작 전 초기화
   wrongList = [];
   quizIndex = 0;
   correctCount = 0;
@@ -213,6 +211,7 @@ document.querySelector("#btnRetryWrong").addEventListener("click", () => {
   showStep("step4");
 });
 
+// ✅ 다음 묶음 학습 or 종료
 document.querySelector("#btnNextBatch").addEventListener("click", () => {
   batchStart += batchSize;
   if (batchStart < allWords.length) {
@@ -221,10 +220,28 @@ document.querySelector("#btnNextBatch").addEventListener("click", () => {
     updateStudyUI(); 
     showStep("step3");
   } else {
-    alert("모든 단어 학습을 완료했습니다!");
-    showStep("step1");
+    // ✅ 모든 세트 종료 → 종료 메시지
+    showFinalMessage();
   }
 });
+
+// ✅ 종료 메시지 + 세트 진행률
+function showFinalMessage() {
+  const totalSets = Math.ceil(allWords.length / batchSize);
+  const finishedSets = Math.ceil(batchStart / batchSize);
+
+  showStep("step5");
+  const card = document.querySelector("#step5 .card.big");
+  card.innerHTML = `
+    <h2>🎉 수고하셨습니다!</h2>
+    <p>모든 세트의 학습이 종료되었습니다.</p>
+    <p><strong>${finishedSets} / ${totalSets} 세트 완료</strong></p>
+    <button id="btnBackHome" class="btn ghost">처음으로</button>
+  `;
+  document.querySelector("#btnBackHome").addEventListener("click", () => {
+    showStep("step1");
+  });
+}
 
 document.querySelector("#btnExportCsv").addEventListener("click", () => {
   let csv = "단어,뜻\n";
