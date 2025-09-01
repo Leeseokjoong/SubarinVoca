@@ -1,6 +1,4 @@
-{
-  "unit": 6,
-  "words": [
+[
     { "word": "wonder", "meaning": "궁금해 하다; 경이, 경탄" },
     { "word": "plain", "meaning": "평원, 평지" },
     { "word": "flat", "meaning": "평평한" },
@@ -79,9 +77,7 @@
     { "word": "regularly", "meaning": "규칙적으로" },
     { "word": "fluently", "meaning": "유창하게" },
     { "word": "cliff", "meaning": "절벽" },
-    { "word": "information", "meaning": "정보" }
-  ],
-  "phrases": [
+    { "word": "information", "meaning": "정보" },
     { "word": "take a trip", "meaning": "여행하다" },
     { "word": "by the way", "meaning": "그런데" },
     { "word": "most of", "meaning": "대부분" },
@@ -96,4 +92,3 @@
     { "word": "make a choice", "meaning": "선택하다" },
     { "word": "name after", "meaning": "~를 따라 이름 짓다" }
   ]
-}
