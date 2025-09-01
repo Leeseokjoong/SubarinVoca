@@ -43,6 +43,8 @@
       <div class="card big">
         <div id="studyWord" class="word"></div>
         <div id="studyMeaning" class="meaning"></div>
+        <!-- ✅ 새로 추가: 단어 이미지 -->
+        <img id="studyImage" class="study-img" alt="단어 그림" />
         <div class="row between">
           <span><span id="studyIndex"></span>/<span id="studyTotal"></span></span>
           <button id="btnSpeak">🔊 발음</button>
@@ -93,20 +95,11 @@
     <p>© 2025 단어 학습 프로그램 v.01</p>
   </footer>
 
-  <!-- ✅ 정답/오답 효과음 추가 -->
-<audio id="correctSound" src="./sounds/correct.mp3" preload="auto"></audio>
-<audio id="wrongSound"   src="./sounds/wrong.mp3"   preload="auto"></audio>
+  <!-- 정답/오답 효과음 -->
+  <audio id="correctSound" src="./sounds/correct.mp3" preload="auto"></audio>
+  <audio id="wrongSound"   src="./sounds/wrong.mp3"   preload="auto"></audio>
 
-<script src="./sounds.js"></script>
-<script src="./app.js"></script>
-
+  <script src="./sounds.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
