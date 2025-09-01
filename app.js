@@ -194,7 +194,14 @@ function showResult() {
   });
 
   document.querySelector("#btnRetryWrong").disabled = wrongList.length === 0;
-  document.querySelector("#btnNextBatch").disabled = (batchStart + batchSize >= allWords.length);
+
+  const hasNext = (batchStart + batchSize < allWords.length);
+  document.querySelector("#btnNextBatch").disabled = !hasNext;
+
+  // ✅ 세트가 하나뿐이라면 결과 대신 종료 메시지 띄우기
+  if (!hasNext) {
+    showFinalMessage();
+  }
 }
 
 // ✅ 오답 다시 풀기
@@ -253,3 +260,4 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 document.querySelector("#btnBackHome").addEventListener("click", () => { showStep("step1"); });
+
