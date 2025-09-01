@@ -1,0 +1,12 @@
+[
+  { "word": "red", "meaning": "빨강", "ascii": ["[RED]"] },
+  { "word": "blue", "meaning": "파랑", "ascii": ["[BLUE]"] },
+  { "word": "green", "meaning": "초록", "ascii": ["[GREEN]"] },
+  { "word": "yellow", "meaning": "노랑", "ascii": ["[YELLOW]"] },
+  { "word": "black", "meaning": "검정", "ascii": ["[BLACK]"] },
+  { "word": "white", "meaning": "하양", "ascii": ["[WHITE]"] },
+  { "word": "pink", "meaning": "분홍", "ascii": ["[PINK]"] },
+  { "word": "brown", "meaning": "갈색", "ascii": ["[BROWN]"] },
+  { "word": "gray", "meaning": "회색", "ascii": ["[GRAY]"] },
+  { "word": "orange", "meaning": "주황", "ascii": ["[ORANGE]"] }
+]
