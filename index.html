@@ -38,13 +38,15 @@
       </div>
     </div>
 
-    <!-- Step3: 학습 화면 -->
+    <!-- Step3: 학습 화면 (ASCII 전용) -->
     <div id="step3" class="screen">
       <div class="card big">
         <div id="studyWord" class="word"></div>
         <div id="studyMeaning" class="meaning"></div>
-        <!-- ✅ 새로 추가: 단어 이미지 -->
-        <img id="studyImage" class="study-img" alt="단어 그림" />
+
+        <!-- 🔤 ASCII 전용 출력 영역 -->
+        <pre id="studyAscii" class="ascii" aria-label="ASCII illustration"></pre>
+
         <div class="row between">
           <span><span id="studyIndex"></span>/<span id="studyTotal"></span></span>
           <button id="btnSpeak">🔊 발음</button>
@@ -95,7 +97,7 @@
     <p>© 2025 단어 학습 프로그램 v.01</p>
   </footer>
 
-  <!-- 정답/오답 효과음 -->
+  <!-- 효과음 -->
   <audio id="correctSound" src="./sounds/correct.mp3" preload="auto"></audio>
   <audio id="wrongSound"   src="./sounds/wrong.mp3"   preload="auto"></audio>
 
