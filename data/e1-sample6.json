@@ -1,0 +1,12 @@
+[
+  { "word": "river", "meaning": "강", "ascii": [" ~~~~~", "~~~~~~~", " ~~~~~"] },
+  { "word": "mountain", "meaning": "산", "ascii": ["   /\\", "  /  \\", " /____\\"] },
+  { "word": "tree", "meaning": "나무", "ascii": ["  &&&", " &&&&&", "   || "] },
+  { "word": "flower", "meaning": "꽃", "ascii": ["  @@@", " ( * )", "  || "] },
+  { "word": "leaf", "meaning": "잎", "ascii": ["  __", " /  \\", " \\__/"] },
+  { "word": "stone", "meaning": "돌", "ascii": ["  ____", " (____)", "  ‾‾‾‾"] },
+  { "word": "cloud", "meaning": "구름", "ascii": ["  .--.", " (    )", "  '--'"] },
+  { "word": "rain", "meaning": "비", "ascii": ["  ///", " ///"] },
+  { "word": "snow", "meaning": "눈", "ascii": [" * * *", "  * *", " * * *"] },
+  { "word": "wind", "meaning": "바람", "ascii": [" ~~~>", " ~~~>"] }
+]
