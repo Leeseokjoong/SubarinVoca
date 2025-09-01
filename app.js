@@ -244,4 +244,26 @@ document.querySelector("#btnExportCsv").addEventListener("click", () => {
 });
 
 // 홈
-document.querySelector("#btnBackHome").addEventListener("click", () => showStep("step1"));
+document.querySelector("#btnBackHome").addEventListener("click", () => {
+  // 음성 재생 중이면 중지
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+
+  // 세트 선택 화면으로 이동
+  showStep("step2");
+
+  // 선택 초기화(원하면 유지해도 됨)
+  const sel = document.querySelector("#presetSelect");
+  if (sel) sel.value = "";
+  const startBtn = document.querySelector("#btnStartStudy");
+  if (startBtn) startBtn.disabled = true;
+
+  // 상태를 깔끔히 정리(선택 사항)
+  selectedFile = "";
+  currentWords = [];
+  studyIndex = 0;
+  quizIndex = 0;
+  wrongList = [];
+  correctCount = 0;
+  wrongCount = 0;
+});
+
