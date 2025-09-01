@@ -1,0 +1,12 @@
+[
+  { "word": "one", "meaning": "하나", "ascii": ["  1 "] },
+  { "word": "two", "meaning": "둘", "ascii": ["  2 "] },
+  { "word": "three", "meaning": "셋", "ascii": ["  3 "] },
+  { "word": "four", "meaning": "넷", "ascii": ["  4 "] },
+  { "word": "five", "meaning": "다섯", "ascii": ["  5 "] },
+  { "word": "six", "meaning": "여섯", "ascii": ["  6 "] },
+  { "word": "seven", "meaning": "일곱", "ascii": ["  7 "] },
+  { "word": "eight", "meaning": "여덟", "ascii": ["  8 "] },
+  { "word": "nine", "meaning": "아홉", "ascii": ["  9 "] },
+  { "word": "ten", "meaning": "열", "ascii": [" 10 "] }
+]
