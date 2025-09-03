@@ -1,0 +1,12 @@
+[
+  { "word": "today", "meaning": "오늘", "ascii": ["  ____ ", " |Now |"] },
+  { "word": "yesterday", "meaning": "어제", "ascii": [" <--- ", " Past "] },
+  { "word": "tomorrow", "meaning": "내일", "ascii": [" ---> ", " Next "] },
+  { "word": "morning", "meaning": "아침", "ascii": ["  \\ | /", "   --- "] },
+  { "word": "afternoon", "meaning": "오후", "ascii": ["   --  ", "  /  \\ "] },
+  { "word": "evening", "meaning": "저녁", "ascii": ["  \\\\|//", "   --  "] },
+  { "word": "night", "meaning": "밤", "ascii": ["   *   ", "  ***  "] },
+  { "word": "week", "meaning": "주", "ascii": [" [7days]"] },
+  { "word": "month", "meaning": "달", "ascii": ["  (   ) ", "  (   ) "] },
+  { "word": "year", "meaning": "년", "ascii": ["  365d ", " [****]"] }
+]
