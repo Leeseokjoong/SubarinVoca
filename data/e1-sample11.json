@@ -1,0 +1,13 @@
+[
+  { "word": "Monday", "meaning": "월요일", "ascii": ["  __  ", " |Mon|"] },
+  { "word": "Tuesday", "meaning": "화요일", "ascii": ["  __  ", " |Tue|"] },
+  { "word": "Wednesday", "meaning": "수요일", "ascii": ["  ___ ", " |Wed|"] },
+  { "word": "Thursday", "meaning": "목요일", "ascii": ["  ___ ", " |Thu|"] },
+  { "word": "Friday", "meaning": "금요일", "ascii": ["  __  ", " |Fri|"] },
+  { "word": "Saturday", "meaning": "토요일", "ascii": ["  ___ ", " |Sat|"] },
+  { "word": "Sunday", "meaning": "일요일", "ascii": ["  __  ", " |Sun|"] },
+  { "word": "Weekday", "meaning": "평일", "ascii": [" [Work]", "   | | "] },
+  { "word": "Weekend", "meaning": "주말", "ascii": [" [Fun ]", "   | | "] },
+  { "word": "Holiday", "meaning": "휴일", "ascii": [" [Rest]", "   | | "] }
+]
+
