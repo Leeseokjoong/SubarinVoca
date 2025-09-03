@@ -1,0 +1,12 @@
+[
+  { "word": "sunny", "meaning": "맑은", "ascii": [" \\  |  /", "   ---  ", " /  |  \\"] },
+  { "word": "cloudy", "meaning": "흐린", "ascii": ["   .--.   ", " .(____). "] },
+  { "word": "rainy", "meaning": "비 오는", "ascii": ["   .--.   ", " .(____). ", "   '  '  "] },
+  { "word": "snowy", "meaning": "눈 오는", "ascii": ["   .--.   ", " .(____). ", "   *  *  "] },
+  { "word": "windy", "meaning": "바람 부는", "ascii": [" ~ ~ ~ >", "   ~ ~  "] },
+  { "word": "stormy", "meaning": "폭풍우 치는", "ascii": ["   .--.   ", " .(____). ", "   //\\\\   "] },
+  { "word": "hot", "meaning": "더운", "ascii": ["  (   )  ", "   /|\\   ", "   / \\   "] },
+  { "word": "cold", "meaning": "추운", "ascii": ["  [***]  ", "   /|\\   ", "   / \\   "] },
+  { "word": "warm", "meaning": "따뜻한", "ascii": ["  (^^)   ", "   /|\\   ", "   / \\   "] },
+  { "word": "cool", "meaning": "시원한", "ascii": ["  (oo)   ", "   /|\\   ", "   / \\   "] }
+]
