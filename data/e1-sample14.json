@@ -1,0 +1,12 @@
+[
+  { "word": "apple", "meaning": "사과", "ascii": ["  ,--.  ", " (    ) ", "  `--'  "] },
+  { "word": "banana", "meaning": "바나나", "ascii": ["   __  ", "  /  ) ", " (__/  "] },
+  { "word": "bread", "meaning": "빵", "ascii": [" ______ ", "/      \\", "\\______ /"] },
+  { "word": "milk", "meaning": "우유", "ascii": ["  ____  ", " |    | ", " |____| "] },
+  { "word": "rice", "meaning": "쌀/밥", "ascii": ["  ////  ", " (o o) ", "  ‾‾‾‾  "] },
+  { "word": "egg", "meaning": "달걀", "ascii": ["  ___  ", " /   \\ ", " \\___/ "] },
+  { "word": "cake", "meaning": "케이크", "ascii": ["   ∆   ", "  [===]", "   | | "] },
+  { "word": "carrot", "meaning": "당근", "ascii": ["   /\\  ", "  /  \\ ", "   ||  "] },
+  { "word": "fish", "meaning": "생선", "ascii": [" ><(((º>", "        "] },
+  { "word": "meat", "meaning": "고기", "ascii": ["  ////  ", " (oo)  ", " ////  "] }
+]
